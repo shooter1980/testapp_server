@@ -1,0 +1,11 @@
+{
+  "name": "testapp_server",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongodb": "^3.6.1"
+  },
+  "devDependencies": {
+    "promise": "^8.1.0"
+  }
+}
