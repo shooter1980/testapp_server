@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "dependencies": {
     "express": "^4.16.4",
-    "mongodb": "^3.6.1"
+    "mongodb": "^3.6.1",
+    "mongoose": "^5.10.3"
   },
   "devDependencies": {
-    "promise": "^8.1.0"
+    "promise": "^8.1.0",
+    "rsvp": "^4.8.5"
   }
 }
