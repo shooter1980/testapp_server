@@ -1,25 +1,28 @@
 const fs = require('fs')
+const models = require('./models');
 
 class FileService{
 
-     writeToCSVFile(items) {
-        const filename = 'output.csv';
-        fs.writeFile(filename, extractAsCSV(items), err => {
-            if (err) {
-                console.log('Error writing to csv file', err);
-            } else {
-                console.log(`saved as ${filename}`);
-            }
-        });
+     writeToCSVFile() {
+         const filename = 'output.csv';
+         models.Item.find({}).exec().then((items)=>{
+             fs.writeFile(filename, new FileService().extractAsCSV(items), err => {
+                 if (err) {
+                     console.log('Error writing to csv file', err);
+                 } else {
+                     console.log(`saved as ${filename}`);
+                 }
+             });
+         }).catch({});
     }
-
-     extractAsCSV(items) {
-        const header = ["Purchase, Price, Count, Sum"];
+    extractAsCSV (items) {
+        const header = ["Purchase\tPrice\tCount\tSum"];
         const rows = items.map(item =>
-            `${item.purchase}, ${item.price}, ${item.count} , ${item.sum}`
+            `${item.purchase}\t${item.price}\t${item.count}\t${item.sum}`
         );
         return header.concat(rows).join("\n");
     }
+
 }
 
 module.exports = FileService

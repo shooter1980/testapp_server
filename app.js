@@ -46,7 +46,7 @@ router.get("/api/del_item", function(request, response, next){
 });
 
 router.get("/api/write/" , function (request, response){
-    file_service.writeToCSVFile(null);
+    file_service.writeToCSVFile();
 });
 
 

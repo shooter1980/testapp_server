@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 let config = require('./config/config');
 
+mongoose.Promise = global.Promise;
+
 mongoose.connect(config.mongoUri,{
     server:{
         poolSize: 10
