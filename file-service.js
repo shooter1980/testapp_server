@@ -1,11 +1,10 @@
 const fs = require('fs')
-const models = require('./models');
-
+let itemsRepository = require('./repositories/items_repository');
 class FileService{
 
-     writeToCSVFile() {
+    async writeToCSVFile() {
          const filename = 'output.csv';
-         models.Item.find({}).exec().then((items)=>{
+         const items = await itemsRepository.getItems();
              fs.writeFile(filename, new FileService().extractAsCSV(items), err => {
                  if (err) {
                      console.log('Error writing to csv file', err);
@@ -13,8 +12,9 @@ class FileService{
                      console.log(`saved as ${filename}`);
                  }
              });
-         }).catch({});
+
     }
+     
     extractAsCSV (items) {
         const header = ["Purchase\tPrice\tCount\tSum"];
         const rows = items.map(item =>

@@ -2,13 +2,14 @@
   "name": "testapp_server",
   "version": "1.0.0",
   "dependencies": {
-    "express": "^4.16.4",
+    "body-parser": "^1.19.0",
+    "cjs": "0.0.11",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
     "mongodb": "^3.6.1",
-    "mongoose": "^5.10.3"
+    "v": "^0.3.0"
   },
   "devDependencies": {
-    "bluebird": "^3.7.2",
-    "promise": "^8.1.0",
-    "rsvp": "^4.8.5"
+    "cors": "^2.8.5"
   }
 }

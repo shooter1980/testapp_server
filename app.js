@@ -1,48 +1,40 @@
 var path = require('path');
 const express = require("express");
 const app = express();
+const bodyParser = require('body-parser');
 app.use('/public',express.static(path.join(__dirname,'../public')));
-var config = require('./config/config');
-const models = require('./models');
-
-let url = require('url');
+let config = require('./config/config');
 let FileService = require('./file-service');
-let Item_Service = require('./item_service');
-// let getItems = require('./items');
+let itemsRepository = require('./repositories/items_repository');
 let router = express.Router();
-let item_service = new Item_Service();
 let file_service = new FileService();
+const cors = require('cors');
 
-require('./dbinit');
-
-
-router.get('/api/items',  function (request, response, next) {
+router.get('/api/items',  async (req, response) => {
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     response.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
-    item_service.getItems(response, next);
+    const result = await itemsRepository.getItems();
+    response.send(result);
 });
 
-
-router.get("/api/add_item", function(request, response, next){
+router.post("/api/add_item", function (req, response){
     console.info("add item");
-    item_service.addItem(request);
+    console.log(req.body);
+    itemsRepository.addItem(req.body);
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    response.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+    response.header('Access-Control-Allow-Methods', 'POST');
+    response.send({"status":"ok"});
 });
 
-
-
-router.get("/api/del_item", function(request, response, next){
-    console.info("del item");
-    let parts = url.parse(request.url, true);
-    let query = parts.query;
-    let id = query._id;
-    item_service.delItem(id);
+router.delete("/api/del_item/:id", async (req, response) =>{
+    console.log("del item");
+    itemsRepository.delItem(req.params.id);
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     response.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+    response.send({"status":"ok"});
 });
 
 router.get("/api/write/" , function (request, response){
@@ -55,6 +47,9 @@ app.listen(config.port,function(err){
     console.info(`Running server at port ${config.port}!`);
 });
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors())
 app.use('/', router);
 module.exports = app;
 module.exports = router;
