@@ -21,20 +21,33 @@ router.get('/api/items',  async (req, response) => {
 router.post("/api/add_item", function (req, response){
     console.info("add item");
     console.log(req.body);
-    itemsRepository.addItem(req.body);
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     response.header('Access-Control-Allow-Methods', 'POST');
-    response.send({"status":"ok"});
+    let item = req.body;
+    console.info("!!!!"+item.count);
+    if(item.purchase===null || item.purchase.length===0
+        ||item.price===null || item.price.length===0
+        ||item.count===null || item.count.length===0
+        ||item.sum===null || item.sum.length===0){
+        response.status(201).send({"status":"error"});
+    }else{
+        itemsRepository.addItem(item);
+        response.send({"status":"ok"});
+    }
 });
 
 router.delete("/api/del_item/:id", async (req, response) =>{
     console.log("del item");
-    itemsRepository.delItem(req.params.id);
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     response.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
-    response.send({"status":"ok"});
+    if(req.params.id===null || req.params.id.length===0){
+        response.send({"status":"error"});
+    }else{
+        itemsRepository.delItem(req.params.id);
+        response.send({"status":"ok"});
+    }
 });
 
 router.get("/api/write/" , function (request, response){
