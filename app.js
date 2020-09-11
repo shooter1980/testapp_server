@@ -30,10 +30,10 @@ router.post("/api/add_item", function (req, response){
         ||item.price===null || item.price.length===0
         ||item.count===null || item.count.length===0
         ||item.sum===null || item.sum.length===0){
-        response.status(201).send({"status":"error"});
+        response.status(400).send({"status":"error"});
     }else{
         itemsRepository.addItem(item);
-        response.send({"status":"ok"});
+        response.status(201).send({"status":"ok"});
     }
 });
 
@@ -43,10 +43,10 @@ router.delete("/api/del_item/:id", async (req, response) =>{
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     response.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
     if(req.params.id===null || req.params.id.length===0){
-        response.send({"status":"error"});
+        response.status(400).send({"status":"error"});
     }else{
         itemsRepository.delItem(req.params.id);
-        response.send({"status":"ok"});
+        response.status(202).send({"status":"ok"});
     }
 });
 
