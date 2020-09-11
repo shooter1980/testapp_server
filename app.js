@@ -26,10 +26,10 @@ router.post("/api/add_item", function (req, response){
     response.header('Access-Control-Allow-Methods', 'POST');
     let item = req.body;
     console.info("!!!!"+item.count);
-    if(item.purchase===null || item.purchase.length===0
-        ||item.price===null || item.price.length===0
-        ||item.count===null || item.count.length===0
-        ||item.sum===null || item.sum.length===0){
+    if(item.purchase===undefined ||item.purchase===null || item.purchase.length===0
+        ||item.price===undefined ||item.price===null || item.price.length===0
+        ||item.count===undefined ||item.count===null || item.count.length===0
+        ||item.sum===undefined ||item.sum===null || item.sum.length===0  ){
         response.status(400).send({"status":"error"});
     }else{
         itemsRepository.addItem(item);
