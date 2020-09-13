@@ -36,7 +36,7 @@ router.post("/api/add_item", function (req, response){
     }
 });
 
-router.delete("/api/del_item/:id", async (req, response) =>{
+router.delete("/api/del_item/:id", function (req, response) {
     console.log("del item");
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -49,8 +49,8 @@ router.delete("/api/del_item/:id", async (req, response) =>{
     }
 });
 
-router.get("/api/write/" , function (request, response){
-    file_service.writeToCSVFile();
+router.get("/api/write/" , async (request, response)=>{
+    await file_service.writeToCSVFile();
 });
 
 
