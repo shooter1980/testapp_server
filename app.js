@@ -10,11 +10,16 @@ let router = express.Router();
 let file_service = new FileService();
 const cors = require('cors');
 
-router.get('/api/items',  async (req, response) => {
+
+router.get('/api/items/:field&:order',  async (req, response) => {
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     response.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
-    const result = await itemsRepository.getItems();
+    let field = req.params.field;
+    let order  = req.params.order;
+    console.info("field="+field);
+    console.info("order="+order);
+    const result = await itemsRepository.getItems(field, order);
     response.send(result);
 });
 
