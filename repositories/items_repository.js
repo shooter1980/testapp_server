@@ -8,9 +8,9 @@ function itemsRepository() {
     const dbName = config.mongoDB;
     const collection = "items";
 
-    function getItems(field, order, filters) {
-        let sortFilter = getSortFilter(field, order);
-        let findFilter = getFindFilter(filters);
+    function getItems(state) {
+        let sortFilter = getSortFilter(state);
+        let findFilter = getFindFilter(state);
         return new Promise(async (resolve, reject) => {
             const client = new MongoClient(url, { useUnifiedTopology: true });
             try {
@@ -61,32 +61,36 @@ function itemsRepository() {
 
 }
 
-function getOrder(order) {
-    if (order === "1") {
-        return 1;
-    } else {
-        return -1;
+function getOrder(state) {
+    if(state && state.sort){
+        if(state.sort.reverse){
+            return  -1;
+        }else{
+           return  1;
+        }
     }
 }
 
-function getSortFilter(field, order) {
-    let o = getOrder(order);
-    if (field === "purchase") {
-        return {purchase: o};
-    } else if (field === "price") {
-        return {price: o};
-    } else if(field ==="count"){
-        return {count: o};
+function getSortFilter(state) {
+    let order = getOrder(state);
+    if(state && state.sort){
+        let field = state.sort.by;
+        if (field === "purchase") {
+            return {purchase: order};
+        } else if (field === "price") {
+            return {price: order};
+        } else if(field ==="count"){
+            return {count: order};
+        }
     }else{
         return "";
     }
 }
 
-function getFindFilter(filters){
-    if(filters!="{}") {
-        let parse = JSON.parse(filters);
+function getFindFilter(state){
+    if(state && state.filters) {
         let jsonData = {};
-        for(let filter of parse){
+        for(let filter of state.filters){
             console.info(filter);
             let columnName = filter.property;
             jsonData[columnName] = filter.value;
