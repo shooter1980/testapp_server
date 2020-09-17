@@ -93,11 +93,21 @@ function getFindFilter(state){
         for(let filter of state.filters){
             console.info(filter);
             let columnName = filter.property;
-            jsonData[columnName] = filter.value;
+            if(filter.value){
+                jsonData[columnName] = {$regex : '^'+filter.value};
+            }else if(filter.low || filter.high){
+                if(filter.low===null && filter.high!==null){
+                    jsonData[columnName] = { $lt : filter.high }
+                }else if(filter.low!==null && filter.high===null){
+                    jsonData[columnName] = { $gt : filter.low }
+                }else if(filter.low!==null && filter.high!==null){
+                    jsonData[columnName] = { $gt : filter.low , $lt : filter.high }
+                }
+            }
             console.info(jsonData);
         }
         return jsonData;
-    }else return {};
+    } else return {};
 }
 
 module.exports = itemsRepository();
